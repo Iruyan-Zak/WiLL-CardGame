@@ -3,17 +3,13 @@ defmodule WillSimulator.State do
     %{deck: [], hand: [], field: [], mana: [], lake: [], scrap: []}
   end
 
-  """
-  state = %{0 => @state, 1 => @state}
-  """
-
-  def move(states, player, from, to, selector) do
-    {picks, rests} = selector.(states[player][from])
-    states = put_in(states[player][from], rests)
-    update_in(states[player][to], &(Enum.concat(picks, &1)))
+  def move(state, from, to, selector) do
+    {picks, rests} = selector.(state[from])
+    state = put_in(state[from], rests)
+    update_in(state[to], &(Enum.concat(picks, &1)))
   end
 
-  def draw(states, player, count \\ 1) do
-    move(states, player, :deck, :hand, &(Enum.split(&1, count)))
+  def draw(state, count \\ 1) do
+    move(state, :deck, :hand, &(Enum.split(&1, count)))
   end
 end
