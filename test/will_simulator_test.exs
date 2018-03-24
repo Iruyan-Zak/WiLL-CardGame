@@ -3,6 +3,8 @@ defmodule WillSimulatorTest do
   doctest WillSimulator
 
   import WillSimulator.State
+  import WillSimulator.StateHelper
+  import WillSimulator.Utils
 
   @state %{default_state() | deck: [1,2,3]}
 
@@ -14,5 +16,18 @@ defmodule WillSimulatorTest do
     assert 1 in draw(@state)[:hand]
     assert 2 in draw(@state)[:deck]
     assert not (1 in draw(@state)[:deck])
+  end
+
+  test "select" do
+    {picks, rests} = select([0,0,2,3], 4..8, 2)
+    assert 6 in picks
+    assert not(7 in picks)
+    assert length(picks) == 2
+    assert length(rests) == 3
+  end
+
+  test "utils" do
+    assert show_enum_with_indices([1,2]) === "0: 1\n1: 2"
+    assert parse_integers("1 2") === [1,2]
   end
 end
