@@ -18,6 +18,15 @@ defmodule WillSimulatorTest do
     assert not (1 in draw(@state)[:deck])
   end
 
+  test "conditional select" do
+    selector = &(conditional_select(&1, 0..9,
+          fn(list) -> Enum.sum(list) < 20 end))
+    {picks, rests} = selector.(0..3)
+    assert length(picks) == 4
+    assert length(rests) == 6
+    assert :condition_not_satisfied === catch_throw selector.(7..9)
+  end
+
   test "select" do
     {picks, rests} = select([0,0,2,3], 4..8, 2)
     assert 6 in picks
