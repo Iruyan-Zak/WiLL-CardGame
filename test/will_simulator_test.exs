@@ -24,7 +24,8 @@ defmodule WillSimulatorTest do
     {picks, rests} = selector.(fn -> 0..3 end)
     assert length(picks) == 4
     assert length(rests) == 6
-    assert :condition_not_satisfied === catch_throw selector.(fn -> 7..9 end)
+    {picks, _rests} = selector.(fn -> [7,:end,8,9] end)
+    assert length(picks) == 1
   end
 
   test "select" do
@@ -37,6 +38,6 @@ defmodule WillSimulatorTest do
 
   test "utils" do
     assert show_enum_with_indices([1,2]) === "0: 1\n1: 2"
-    assert parse_integers("1 2") === [1,2]
+    assert parse_atoms_or_integers("1 end") === [1,:end]
   end
 end
