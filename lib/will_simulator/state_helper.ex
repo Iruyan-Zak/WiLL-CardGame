@@ -1,7 +1,9 @@
 defmodule WillSimulator.StateHelper do
-  def conditional_select(index_stream, enum, predicate) do
+  @input_source Application.get_env(:will_simulator, :input_source)
+
+  def conditional_select(index_generator \\ @input_source, enum, predicate) do
     picked = with [picked | _] <-
-      index_stream
+      index_generator.()
       |> Stream.uniq
       |> Stream.take_while(&(&1 !== :end))
       |> Stream.map(&(Enum.at(enum, &1)))
@@ -15,9 +17,9 @@ defmodule WillSimulator.StateHelper do
     {picked, Enum.to_list(enum) -- picked}
   end
 
-  def select(index_stream, enum, count \\ 1) do
+  def select(index_generator \\ @input_source, enum, count \\ 1) do
     picked =
-      index_stream
+      index_generator.()
       |> Stream.uniq
       |> Stream.map(&(Enum.at(enum, &1)))
       |> Stream.reject(&(&1 === nil))
