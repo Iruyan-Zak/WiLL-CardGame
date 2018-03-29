@@ -6,10 +6,15 @@ defmodule WillSimulator.Utils do
     |> Enum.join("\n")
   end
 
-  def parse_integers(string) do
+  def parse_atoms_or_integers(string) do
     string
     |> String.trim
     |> String.split(" ")
-    |> Enum.map(&(String.to_integer(&1)))
+    |> Enum.map(fn str ->
+      case Integer.parse(str) do
+        {val, _} -> val
+        _ -> String.to_atom(str)
+      end
+    end)
   end
 end

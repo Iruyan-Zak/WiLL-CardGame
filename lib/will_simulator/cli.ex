@@ -1,10 +1,10 @@
 defmodule WillSimulator.CLI do
   import WillSimulator.Utils
 
-  def read_integers() do
+  def read_atoms_or_integers() do
     Stream.repeatedly(fn ->
-      IO.gets("Input numbers with space separated > ")
-      |> parse_integers
+      IO.gets("Input numbers or texts with space separated > ")
+      |> parse_atoms_or_integers
     end)
     |> Stream.concat
   end
