@@ -21,15 +21,19 @@ defmodule WillSimulatorTest do
   test "conditional select" do
     selector = &(conditional_select(&1, 0..9,
           fn(list) -> Enum.sum(list) < 20 end))
-    {picks, rests} = selector.(fn -> 0..3 end)
+    {picks, rests} = selector.(fn -> [0,1,2,3,:end] end)
     assert length(picks) == 4
     assert length(rests) == 6
     {picks, _rests} = selector.(fn -> [7,:end,8,9] end)
     assert length(picks) == 1
+    result = selector.(fn -> [:cancel] end)
+    assert result === :cancel
+    result = selector.(fn -> [0,1,2,3] end)
+    assert result === :invalid
   end
 
   test "select" do
-    {picks, rests} = select(fn -> [0,0,2,3] end, 4..8, 2)
+    {picks, rests} = select(fn -> [0,2,:end] end, 4..8, 2)
     assert 6 in picks
     assert not(7 in picks)
     assert length(picks) == 2
