@@ -26,10 +26,8 @@ defmodule WillSimulatorTest do
     assert length(rests) == 6
     {picks, _rests} = selector.(fn -> [7,:end,8,9] end)
     assert length(picks) == 1
-    result = selector.(fn -> [:cancel] end)
-    assert result === :cancel
     result = selector.(fn -> [0,1,2,3] end)
-    assert result === :invalid
+    assert result === :error
   end
 
   test "select" do

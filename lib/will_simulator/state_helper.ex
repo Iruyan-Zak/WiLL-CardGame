@@ -30,7 +30,7 @@ defmodule WillSimulator.StateHelper do
     end
 
     case selected do
-      :invalid -> :error
+      :error -> :error
       _vals ->
         if predicate.(selected) do
           {selected, candidate -- selected}
